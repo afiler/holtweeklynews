@@ -1,0 +1,51 @@
+<% search_string = "#{@params['search_text']}" %>
+
+<div id="search_results">
+	<h1>Search Results</h1>
+	
+	Results <%="<b>#{@pages.current.first_item} to #{@pages.current.last_item}</b> " +
+	"of <b>#{@total}</b> for <b>'#{search_string}'</b>"%>
+	<% i = 0
+	slop = 200
+	search_text = @params[:search_text]
+	for image_index in @image_indexes
+		image = Image.find image_index[:image_id] %>
+	  <div class="search_result_row">
+		<% roll, imgnum = image.loc.split('/')
+		if @params[:search_text]
+			#full_text = image.text_index.full_text
+			full_text = image_index.full_text
+			pos = full_text.downcase.index(search_text.downcase)
+			if pos then
+				pre_context = full_text[pos-slop...pos]
+				result = full_text[pos...search_text.length+pos]
+				post_context = full_text[search_text.length+pos...search_text.length+pos+slop]
+			else
+				pre_context = ''
+				result = ''
+				post_context = ''
+			end
+		end
+		i = i + 1
+		%>
+		<%=link_to(image_tag("/imagedb/1001/#{roll}/#{imgnum}/thumb.150.gif", :border=>0), :action => 'show', :id => image, :search_text => search_text) %>
+		<p>
+    		<b>Image</b>: <%=image.loc%><br/>
+			<b>Issue(s)</b>:
+			<% for issue in image.issues %>
+				<%= issue.issue_date %>
+			<% end %>
+			<br/>
+			<% if @params[:search_text] %>
+				<i>...<%=pre_context%><b><%=result%></b><%=post_context%>...</i></br>
+    		<% end %>
+			<%= link_to 'Show', :action => 'show', :id => image, :search_text => search_text %>
+		</p>
+  	  </div>
+	<% end %>
+</div>
+
+<div id="pager">
+	<%= link_to "Previous page", { :search_text => @params[:search_text], :page => @pages.current.previous } if @pages.current.previous %>
+	<%= link_to "Next page", { :search_text => @params[:search_text], :page => @pages.current.next } if @pages.current.next %> 
+</div>

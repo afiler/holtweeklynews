@@ -1,0 +1,9 @@
+#imageInfo { display: none; }
+#heading_small_image { display: none; }
+#heading_small_right { display: none; }
+
+#imageArea table {
+	border: 0;
+	cell-spacing: 0;
+	cell-padding: 0;
+}

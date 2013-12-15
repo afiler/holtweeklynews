@@ -1,0 +1,83 @@
+<%
+# temp -- these should be options
+zoom = 13
+thumb_height = 150
+start_pos_x = 0
+start_pos_y = 0
+##
+
+web_path = "/imagedb/1001/"
+table_size_x = 8
+table_size_y = 6
+segment_size = 100
+
+if @params[:search_text]
+	search_text = @params[:search_text]
+	start_x, start_y, end_x, end_y, h, w = get_pos(search_text, @image.loc)
+	if start_x == 0 then search_text = nil end
+end
+%>
+
+<script>
+	imageLoc = '<%=@image.loc%>' + '';
+	tableSizeX = <%=table_size_x%>;
+	tableSizeY = <%=table_size_y%>;
+	segmentSize = <%=segment_size%>;
+	webPath = '<%=web_path%>';
+	zoom = <%=zoom%>;
+	zoomLevels = Array(13, 25, 50, 100);
+	<% if search_text %>
+		searchTextPos = Array(<%="#{start_x},#{start_y},#{end_x},#{end_y},#{h},#{w}"%>)
+	<% else %>
+		searchTextPos = 0;
+	<% end %>
+</script>
+
+<div id="imageInfo">
+	<div id="thumbnailArea">
+		<img id="thumbnail" src="/imagedb/1001/<%=@image.loc%>/thumb.<%=thumb_height%>.gif"/>
+		<div id="marker"></div>
+	</div>
+	Click and drag the red square to select an<br /> area of the paper to zoom in on.
+	<form id="inf"><input type=text name="x" size=20 style="display:none;"></form>
+	<b>Image: <%= link_to '<<', :controller=>'images', :action=>'show', :id=>@image.id-1 %>
+	<%=@image.id%> <%= link_to '>>', :controller=>'images', :action=>'show', :id=>@image.id+1 %><br/>
+	<b>Image file: <a href="/imagedb/1001/<%=@image.loc%>.tif"><%=@image.loc%></a><br/> 
+	<b>Newspaper:</b> <%=@image.issues[0] ? @image.issues[0].paper.title : ''%><br/>
+	<b>Issue Date(s):<br/></b>
+	<% for @issue in @image.issues %>
+		<%=link_to @issue.issue_date, :controller=>'issues', :action=>'show', :id=>@issue%><br/>
+	<% end %><br/>
+	<b>Zoom:</b><br/>
+	<a onClick="changeZoom(-1);">-</a><br/>
+	<div id="zoom13"><a onClick="setZoom(13);">&bull;</a><br/></div>
+	<div id="zoom25"><a onClick="setZoom(25);">&bull;</a><br/></div>
+	<div id="zoom50"><a onClick="setZoom(50);">&bull;</a><br/></div>
+	<div id="zoom100"<a onClick="setZoom(100);">&bull;</a><br/></div>
+	<a onClick="changeZoom(1);">+</a><br/>
+</div>
+
+<div id="imageArea">
+	<table>
+	<tr><td align="center" colspan="3"><a onClick="move(0,-1);"><img src="/images/arrow_up.gif"></a></td></tr>
+	<tr><td><a onClick="move(-1,0);"><img src="/images/arrow_left.gif"></a></td>
+	<td>
+	<table border=0 cellspacing=0 cellpadding=0><%
+	for y in (0...table_size_y)
+    	y_pix_pos = (y+start_pos_y) * segment_size 
+		%><tr><%
+		for x in (0...table_size_x)
+	    	x_pix_pos = (x+start_pos_x) * segment_size
+	    	%><td><img id="<%="#{x}x#{y}"%>" src="/images/tp.gif" width=100 height=100></td><%
+		end
+    	%></tr><%
+	end
+	%>
+	</table>
+	</td>	
+	<td><a onClick="move(1,0);"><img src="/images/arrow_right.gif"></a></td></tr>
+	<tr><td align="center" colspan="3"><a onClick="move(0,1);"><img src="/images/arrow_down.gif"></a></td></tr>
+	</table>
+	<div id="search_highlight">
+	</div>
+</div>

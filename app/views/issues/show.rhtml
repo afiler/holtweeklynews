@@ -1,0 +1,17 @@
+<% for column in Issue.content_columns %>
+<p>
+  <b><%= column.human_name %>:</b> <%=h @issue.send(column.name) %>
+</p>
+<% end %>
+
+<b>Issue Date</b>: <%= @issue.issue_date %>
+
+<% @images = @issue.images
+
+for @image in @images
+    %><p><b><%= link_to @image.loc, :controller => 'images', :action => 'show', :id => @image %></b></p><%
+end
+%>
+
+<%= link_to 'Edit', :action => 'edit', :id => @issue %> |
+<%= link_to 'Back', :action => 'list' %>

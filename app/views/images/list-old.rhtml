@@ -1,0 +1,83 @@
+<% search_string = "#{@params['search_text']}" %>
+<div id="searchinfo">
+	<h1>Search Results</h1>
+	
+	Searching for '<%=@params['search_text']%>' returned 
+	
+
+def get_context(search_string, loc)
+	rollImg = loc.split('/')
+	f = File.open("/var/www/holtweeklynews.com/fulltextdb/#{rollImg[0]}/csv/#{rollImg[1]}.csv")
+	lines = []
+	f.readlines().each { |l| lines << l.split(',') }
+	text = []
+	lines2 = []
+	last_line = lines.first
+	for line in lines
+		if line[2] != last_line[2]
+			text << ' '
+			lines2 << [' ', last_line[1], last_line[2], last_line[3], last_line[4]]
+		end
+		last_line = line
+		lines2 << line
+		if line[0].length == 1
+			text << line[0]
+		else
+			text << ' '
+		end
+	end
+	
+	text = text.join('')
+	slop = 40
+	pos = text.index(@params['search_text'])
+
+	pre_context = text[pos-slop..pos-1]
+	result = text[pos..pos+@params['search_text'].length]
+	post_context = text[pos+@params['search_text'].length..pos+@params['search_text'].length+slop]
+	x = lines2[pos][1].to_f
+	y = lines2[pos][2].to_f
+	h = lines2[pos][3].to_f
+	w = lines2[pos][4].to_f
+
+	return [pre_context, result, post_context, x, y, h, w]
+end
+
+%>
+
+<div class="search_results">
+<% i = 0
+slop = 40
+search_text = @params[:search_text]
+for image in @images %>
+  <div class="search_result_row">
+	<% roll, imgnum = image.loc.split('/')
+	if @params[:search_text]
+		full_text = image.text_index.full_text
+		pos = full_text.index(search_text)
+		pre_context = full_text[pos-slop...pos]
+		result = full_text[pos...search_text.length+pos]
+		post_context = full_text[search_text.length+pos...search_text.length+pos+slop]
+	end
+	i = i + 1
+	%>
+	<%=link_to(image_tag("/imagedb/1001/#{roll}/#{imgnum}/thumb.150.gif", :border=>0), :action => 'show', :id => image, :search_text => search_text) %>
+	<p>
+    	<b>Image</b>: <%=image.loc%><br/>
+		<b>Issue(s)</b>:
+		<% for issue in image.issues %>
+			<%= issue.issue_date %>
+		<% end %>
+			<br/>
+		<% if @params[:search_text] %>
+			<i>...<%=pre_context%><b><%=result%></b><%=post_context%>...</i></br>
+    	<% end %>
+		<%= link_to 'Show', :action => 'show', :id => image, :search_text => search_text %>
+	</p>
+  </div>
+<% end %>
+</div>
+
+<div class="pager">
+	<%= link_to "Previous page", { :search_text => @params[:search_text], :page => @image_pages.current.previous } if @image_pages.current.previous %>
+	<%= link_to "Next page", { :search_text => @params[:search_text], :page => @image_pages.current.next } if @image_pages.current.next %> 
+</div>

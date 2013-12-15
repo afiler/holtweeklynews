@@ -1,0 +1,27 @@
+<h1>Listing papers</h1>
+
+<table>
+  <tr>
+<% for column in Paper.content_columns %>
+    <th><%= column.human_name %></th>
+<% end %>
+  </tr>
+  
+<% for paper in @papers %>
+  <tr>
+  <% for column in Paper.content_columns %>
+    <td><%=h paper.send(column.name) %></td>
+  <% end %>
+    <td><%= link_to 'Show', :action => 'show', :id => paper %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => paper %></td>
+    <td><%= link_to 'Destroy', {:action => 'destroy', :id => paper}, :confirm => "Are you sure?" %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to "Previous page", { :page => @paper_pages.current.previous } if @paper_pages.current.previous %>
+<%= link_to "Next page", { :page => @paper_pages.current.next } if @paper_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New paper', :action => 'new' %>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Holt Weekly News: <%= controller.action_name %></title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body onload="if (typeof(init) != 'undefined') { init(); }">
+
+  <div id="heading_small_image">
+  	<a href="/"><img src="/images/heading_small.gif" /></a>
+  </div>
+  <div id="heading_small_right">
+  	<a href="/">Home</a>
+  </div>
+
+  <div id="content">
+    <%= yield %>
+  </div>
+
+</body>
+</html>

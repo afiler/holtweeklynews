@@ -1,0 +1,74 @@
+#thumbnailArea {
+	position: relative;
+	border:1px solid #000000;
+	margin-top:5px;
+	xwidth:250px;
+	xheight:150px;
+	cursor:crosshair;
+}
+
+div#imageArea {
+	position: relative;
+	left: 10px;
+	top: 10px;
+	float: left;
+	clear: right;
+}
+
+#marker {
+	position:absolute;
+	top:0px;
+	left:0px;
+	border:1px solid #FF0000;
+	width:20px;
+	height:20px;
+	cursor:pointer;
+	background-image:url("/images/tp.gif");
+}
+
+#search_highlight {
+	width: 0px;
+	height: 0px;
+	padding: 10px;
+	background-color: #0ff;
+	filter:alpha(opacity=30);
+	-moz-opacity:0.3;
+	opacity: 0.3;
+	top: -1px;
+	left: -1px;
+	position: absolute;
+	z-axis: 0;
+}
+
+#smearch_highlight * {
+	position: relative;
+}
+
+#smearch_highlight div {
+	padding: 20px;
+	font-weight: bold;
+	color: #000;
+}
+
+#imageInfo {
+	position: relative;
+	font-size:9px;
+	font-family:verdana;
+	margin:5px;
+	float: left;
+	clear: none;
+}
+
+#imageArea table {
+	border: 0;
+	cell-spacing: 0;
+	cell-padding: 0;
+}
+
+.selectedZoom {
+	background-color = #cc0000;
+}
+
+.unselectedZoom {
+	background-color = #00cc00;
+}

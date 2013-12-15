@@ -1,0 +1,23 @@
+development:
+  adapter: mysql
+  database: holtweeklynews_com_db
+  host: localhost
+  username: u2203_db
+  password: ieJefu8vahSeiN2e
+  #socket: /var/lib/mysql/mysql.sock
+  
+test:
+  adapter: mysql
+  database: holt
+  host: localhost
+  username: holt
+  password: 4490holt
+  socket: /var/lib/mysql/mysql.sock
+
+production:
+  adapter: mysql
+  database: holtweeklynews_com_db
+  host: localhost
+  username: u2203_db
+  password: ieJefu8vahSeiN2e
+  #socket: /var/lib/mysql/mysql.sock

@@ -1,0 +1,25 @@
+<html>
+<head>
+  <title>Holt Weekly News: <%= controller.action_name %></title>
+  <%= stylesheet_link_tag 'screen' %>
+  <%= stylesheet_link_tag 'print', :media=>'print' %>
+  <% if controller.action_name == 'show' %>
+	<%= stylesheet_link_tag 'image_navigator' %>
+	<%= javascript_include_tag 'image_navigator' %>
+  <% end %>
+</head>
+<body onload="if (typeof(init) != 'undefined') { init(); }">
+
+<div id="heading_small_image">
+	<a href="/"><img src="/images/heading_small.gif" /></a>
+</div>
+<div id="heading_small_right">
+	<a href="/">Home</a>
+</div>
+
+<div id="content">
+	<%= @content_for_layout %>
+</div>
+
+</body>
+</html>

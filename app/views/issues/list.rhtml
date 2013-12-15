@@ -1,0 +1,27 @@
+<h1>Listing issues</h1>
+
+<table>
+  <tr>
+<% for column in Issue.content_columns %>
+    <th><%= column.human_name %></th>
+<% end %>
+  </tr>
+  
+<% for issue in @issues %>
+  <tr>
+  <% for column in Issue.content_columns %>
+    <td><%=h issue.send(column.name) %></td>
+  <% end %>
+    <td><%= link_to 'Show', :action => 'show', :id => issue %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => issue %></td>
+    <td><%= link_to 'Destroy', {:action => 'destroy', :id => issue}, :confirm => "Are you sure?" %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to "Previous page", { :page => @issue_pages.current.previous } if @issue_pages.current.previous %>
+<%= link_to "Next page", { :page => @issue_pages.current.next } if @issue_pages.current.next %> 
+
+<br />
+
+<%= link_to 'New issue', :action => 'new' %>

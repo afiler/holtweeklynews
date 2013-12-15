@@ -1,0 +1,15 @@
+xml.instruct! :xml, :version=>"1.0" 
+xml.images {
+	for image in @images
+		xml.image do
+			xml.image_id(image.id)
+			xml.loc(image.loc)
+			xml.width(image.pixels_x)
+			xml.height(image.pixels_y)
+			xml.textWidth(image.pdf_x)
+			xml.textHeight(image.pdf_y)
+			xml.prevImageId(image.id-1)
+			xml.nextImageId(image.id+1)
+		end
+	end
+}
